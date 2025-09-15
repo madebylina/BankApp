@@ -1,5 +1,6 @@
-package com.model;
+package com.model.entities;
 
+import com.model.dto.CurrencyEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
