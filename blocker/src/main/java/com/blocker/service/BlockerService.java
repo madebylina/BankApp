@@ -9,6 +9,6 @@ public class BlockerService {
 
     public Boolean validate() {
         requestCount++;
-        return requestCount % 4 !=0;
+        return requestCount % 4 != 0;
     }
 }
