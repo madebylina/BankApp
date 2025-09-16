@@ -29,6 +29,7 @@
 	<module>blocker</module>
 	<module>accounts</module>
     <module>blocker</module>
+	<module>cash</module>
 </modules>
 
 

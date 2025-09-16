@@ -17,7 +17,7 @@
         </processorPath>
         <module name="accounts" />
       </profile>
-      <profile name="Annotation profile for blocker" enabled="true">
+      <profile name="Annotation profile for cash" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -25,7 +25,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
-        <module name="blocker" />
+        <module name="cash" />
       </profile>
     </annotationProcessing>
   </component>
@@ -34,6 +34,7 @@
       <module name="BankApp" options="-parameters" />
       <module name="accounts" options="-parameters" />
       <module name="blocker" options="-parameters" />
+      <module name="cash" options="-parameters" />
     </option>
   </component>
 </project>
