@@ -1,15 +1,15 @@
-package com;
+package com.account.service;
 
-import com.mapper.AccountMapper;
-import com.mapper.UserMapper;
-import com.model.dto.AccountDto;
-import com.model.dto.CurrencyEnum;
-import com.model.dto.TransferDto;
-import com.model.dto.UserDto;
-import com.model.entities.Account;
-import com.model.entities.User;
-import com.repository.AccountRepository;
-import com.repository.UserRepository;
+import com.account.mapper.AccountMapper;
+import com.account.mapper.UserMapper;
+import com.account.model.dto.AccountDto;
+import com.account.model.dto.CurrencyEnum;
+import com.account.model.dto.TransferDto;
+import com.account.model.dto.UserDto;
+import com.account.model.entities.Account;
+import com.account.model.entities.User;
+import com.account.repository.AccountRepository;
+import com.account.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

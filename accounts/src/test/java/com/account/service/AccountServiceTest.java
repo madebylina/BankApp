@@ -1,12 +1,10 @@
 package com.account.service;
 
-import com.AccountService;
 import com.account.model.dto.*;
-import com.model.dto.*;
-import com.model.entities.Account;
-import com.model.entities.User;
-import com.repository.AccountRepository;
-import com.repository.UserRepository;
+import com.account.model.entities.Account;
+import com.account.model.entities.User;
+import com.account.repository.AccountRepository;
+import com.account.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

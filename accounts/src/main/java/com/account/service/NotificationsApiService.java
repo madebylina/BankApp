@@ -1,6 +1,6 @@
-package com;
+package com.account.service;
 
-import com.model.dto.NotificationDto;
+import com.account.model.dto.NotificationDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

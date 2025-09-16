@@ -1,4 +1,4 @@
-package com.model.dto;
+package com.account.model.dto;
 
 public enum CurrencyEnum {
     RUB("Рубли"),

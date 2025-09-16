@@ -1,8 +1,8 @@
-package com.mapper;
+package com.account.mapper;
 
-import com.model.dto.AccountDto;
-import com.model.entities.Account;
-import com.model.entities.User;
+import com.account.model.dto.AccountDto;
+import com.account.model.entities.Account;
+import com.account.model.entities.User;
 
     public class AccountMapper {
 

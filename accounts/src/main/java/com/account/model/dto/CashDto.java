@@ -1,4 +1,4 @@
-package com.model.dto;
+package com.account.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransferDto {
-
+public class CashDto {
     private Long userId;
-    private ExchangeDto fromExchange;
-    private ExchangeDto toExchange;
+    private CurrencyEnum currency;
     private Double value;
-    private Long toUserId;
+    private CashActionEnum cashAction;
 }

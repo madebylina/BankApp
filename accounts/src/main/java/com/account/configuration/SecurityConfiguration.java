@@ -1,4 +1,4 @@
-package com.configuration;
+package com.account.configuration;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

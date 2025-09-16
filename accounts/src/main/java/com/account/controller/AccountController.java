@@ -1,8 +1,9 @@
-package com.controller;
+package com.account.controller;
 
-import com.AccountService;
-import com.NotificationsApiService;
-import com.model.dto.*;
+import com.account.model.dto.*;
+import com.account.service.AccountService;
+import com.account.service.NotificationsApiService;
+import com.account.configuration.model.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.model.entities;
+package com.account.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
