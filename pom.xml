@@ -28,6 +28,7 @@
 	<module>notifications</module>
 	<module>blocker</module>
 	<module>accounts</module>
+    <module>blocker</module>
 </modules>
 
 

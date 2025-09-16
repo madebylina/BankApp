@@ -18,11 +18,10 @@ Contract.make {
                 username: "user1",
                 password: "hashed_password_1",
                 personName: "Иван Иванов",
-                dateOfBirth: " 1988-01-01"
+                dateOfBirth: "1990-01-01"
         )
         headers {
             contentType(applicationJson())
         }
     }
 }
-
