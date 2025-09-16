@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/accounts/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/blocker/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cash/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/consul/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/consul/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

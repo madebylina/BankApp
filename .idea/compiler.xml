@@ -15,6 +15,7 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
+        <module name="blocker" />
         <module name="accounts" />
       </profile>
       <profile name="Annotation profile for cash" enabled="true">
@@ -28,6 +29,9 @@
         <module name="cash" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="consul" target="23" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
