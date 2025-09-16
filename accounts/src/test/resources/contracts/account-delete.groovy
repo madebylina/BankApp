@@ -1,6 +1,6 @@
 package contracts
 
-import org.springframework.lang.Contract
+import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
     description("Удалить аккаунт по ID")
