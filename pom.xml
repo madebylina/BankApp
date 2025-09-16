@@ -30,6 +30,7 @@
 	<module>accounts</module>
     <module>blocker</module>
 	<module>cash</module>
+	<module>exchange-generator</module>
 </modules>
 
 
