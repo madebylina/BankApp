@@ -1,4 +1,4 @@
-package com.blocker;
+package com.blocker.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Configuration
 @EnableMethodSecurity

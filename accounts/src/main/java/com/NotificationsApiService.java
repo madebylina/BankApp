@@ -1,4 +1,4 @@
-package com.service;
+package com;
 
 import com.model.dto.NotificationDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;

@@ -1,12 +1,12 @@
-package com;
+package com.account.contracts;
 
 import com.controller.AccountController;
 import com.model.dto.AccountDto;
 import com.model.dto.CurrencyEnum;
 import com.model.dto.TransferDto;
 import com.model.dto.UserDto;
-import com.service.AccountService;
-import com.service.NotificationsApiService;
+import com.AccountService;
+import com.NotificationsApiService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;

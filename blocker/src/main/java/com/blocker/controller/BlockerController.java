@@ -1,6 +1,6 @@
-package com.controller;
+package com.blocker.controller;
 
-import com.service.BlockerService;
+import com.blocker.service.BlockerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

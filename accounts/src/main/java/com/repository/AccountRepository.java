@@ -2,7 +2,6 @@ package com.repository;
 
 import com.model.dto.CurrencyEnum;
 import com.model.entities.Account;
-import jdk.jfr.Registered;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

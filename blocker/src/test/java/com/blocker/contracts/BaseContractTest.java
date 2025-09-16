@@ -1,7 +1,7 @@
 package com.blocker.contracts;
 
-import com.controller.BlockerController;
-import com.service.BlockerService;
+import com.blocker.controller.BlockerController;
+import com.blocker.service.BlockerService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;

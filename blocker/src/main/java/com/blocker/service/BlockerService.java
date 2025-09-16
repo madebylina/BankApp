@@ -1,4 +1,4 @@
-package com.service;
+package com.blocker.service;
 
 import org.springframework.stereotype.Service;
 
