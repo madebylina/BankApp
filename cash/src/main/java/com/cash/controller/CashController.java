@@ -3,6 +3,9 @@ package com.cash.controller;
 import com.cash.dto.CashDto;
 import com.cash.dto.NotificationDto;
 import com.cash.dto.UserDto;
+import com.cash.service.AccountsApiService;
+import com.cash.service.BlockerApiService;
+import com.cash.service.NotificationsApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,7 @@ import javax.management.OperationsException;
 public class CashController {
 
     private final AccountsApiService accountsApiService;
-    private final NotificationApiService notificationApiService;
+    private final NotificationsApiService notificationApiService;
     private final BlockerApiService blockerApiService;
 
     @PostMapping("")
@@ -26,7 +29,7 @@ public class CashController {
         if (!blockerApiService.validate()) {
             throw new OperationsException("Операция заблокирована блокировщиком");
         }
-        UserDto userDto = accountsApiService.getUserByid(cashDto.getUserId());
+        UserDto userDto = accountsApiService.getUserById(cashDto.getUserId());
         notificationApiService.notificate(new NotificationDto(userDto.getUsername(), cashDto.toString()));
         accountsApiService.cash(cashDto);
     }
