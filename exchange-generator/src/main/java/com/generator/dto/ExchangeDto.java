@@ -1,4 +1,4 @@
-package com.generator.configuration.dto;
+package com.generator.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
