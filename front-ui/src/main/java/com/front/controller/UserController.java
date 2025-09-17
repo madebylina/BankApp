@@ -1,6 +1,10 @@
 package com.front.controller;
 
 import com.front.dto.*;
+import com.front.service.AccountsApiService;
+import com.front.service.BankUserDetailsService;
+
+import com.front.service.CashApiService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +29,7 @@ import java.util.List;
 public class UserController {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserDetailService userDetailService;
+    private final BankUserDetailsService userDetailService;
     private final AccountsApiService accountsApiService;
     private final CashApiService cashApiService;
     private final TransferApiService transferApiService;
