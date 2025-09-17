@@ -16,17 +16,9 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="blocker" />
+        <module name="exchange" />
         <module name="accounts" />
         <module name="cash" />
-      </profile>
-      <profile name="Annotation profile for exchange-generator" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
         <module name="exchange-generator" />
       </profile>
     </annotationProcessing>
@@ -40,6 +32,7 @@
       <module name="accounts" options="-parameters" />
       <module name="blocker" options="-parameters" />
       <module name="cash" options="-parameters" />
+      <module name="exchange" options="-parameters" />
       <module name="exchange-generator" options="-parameters" />
     </option>
   </component>
