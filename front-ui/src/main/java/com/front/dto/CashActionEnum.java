@@ -1,4 +1,4 @@
-package com.front.configuration.dto;
+package com.front.dto;
 
 public enum CashActionEnum {
     PUT,

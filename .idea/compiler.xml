@@ -18,6 +18,7 @@
         <module name="blocker" />
         <module name="exchange" />
         <module name="accounts" />
+        <module name="front-ui" />
         <module name="cash" />
         <module name="exchange-generator" />
       </profile>
@@ -34,6 +35,7 @@
       <module name="cash" options="-parameters" />
       <module name="exchange" options="-parameters" />
       <module name="exchange-generator" options="-parameters" />
+      <module name="front-ui" options="-parameters" />
     </option>
   </component>
 </project>

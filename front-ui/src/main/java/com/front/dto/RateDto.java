@@ -1,4 +1,4 @@
-package com.front.configuration.dto;
+package com.front.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExchangeDto {
+public class RateDto {
 
-    private CurrencyEnum currency;
+    private String title;
+    private String name;
     private Double value;
 
 }
