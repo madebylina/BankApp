@@ -4,6 +4,10 @@ import com.transfer.dto.CurrencyEnum;
 import com.transfer.dto.ExchangeDto;
 import com.transfer.dto.NotificationDto;
 import com.transfer.dto.TransferDto;
+import com.transfer.service.AccountsApiService;
+import com.transfer.service.BlockerApiService;
+import com.transfer.service.ExchangeApiService;
+import com.transfer.service.NotificationsApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +27,7 @@ public class TransferController {
     private final AccountsApiService accountsApiService;
     private final ExchangeApiService exchangeApiService;
     private final NotificationsApiService notificationsApiService;
-    private final BlokerApiService blokerApiService;
+    private final BlockerApiService blokerApiService;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_TRANSFER')")
