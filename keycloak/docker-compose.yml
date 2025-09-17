@@ -1,0 +1,24 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.3
+    container_name: keycloak_one
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      # Запускаем Keycloak в режиме разработки и указываем, что нужно импортировать Realm
+      [ "start-dev", "--import-realm" ]
+    ports:
+      # Пробрасываем порт для доступа к Keycloak
+      - "8089:8080"
+    volumes:
+      # Монтируем именованный том для постоянного хранения данных
+      #      - keycloak-data:/opt/keycloak/data
+      # Монтируем локальный файл realm-а в директорию импорта контейнера
+      #      - ./keycloak-export/bank-realm.json:/opt/keycloak/data/import/bank-realm.json
+      - ./realms/bank-realm.json:/opt/keycloak/data/import/bank-realm.json
+
+# Определяем именованный том, который Docker будет создавать и управлять
+#volumes:
+#  keycloak-data:
+#    driver: local

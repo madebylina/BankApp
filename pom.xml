@@ -18,22 +18,17 @@
 	<artifactId>BankApp</artifactId>
 	<version>0.0.1</version>
 	<packaging>pom</packaging>
-<modules>
-	<module>front-ui</module>
-	<module>accounts</module>
-	<module>cash</module>
-	<module>transfer</module>
-	<module>exchange</module>
-	<module>exchange-generator</module>
-	<module>notifications</module>
-	<module>blocker</module>
-	<module>accounts</module>
-    <module>blocker</module>
-	<module>cash</module>
-	<module>exchange-generator</module>
-	<module>exchange</module>
-	<module>front-ui</module>
-</modules>
+	<modules>
+		<module>front-ui</module>
+		<module>accounts</module>
+		<module>cash</module>
+		<module>transfer</module>
+		<module>exchange</module>
+		<module>exchange-generator</module>
+		<module>notifications</module>
+		<module>blocker</module>
+		<module>notifications</module>
+	</modules>
 
 
 

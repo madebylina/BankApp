@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/exchange-generator/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/exchange/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/front-ui/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/keycloak/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notifications/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
