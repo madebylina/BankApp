@@ -1,6 +1,7 @@
 package com.notifications.controller;
 
 import com.notifications.dto.NotificationDto;
+import com.notifications.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,0 +1,25 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: notifications-api
+  config:
+    import: 'optional:consul:'
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        register-health-check: false
+      config:
+        enabled: true
+        format: yaml
+        prefix: config
+        defaultContext: application
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8089/realms/bank
