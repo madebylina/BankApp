@@ -23,6 +23,6 @@ public class ExchangeController {
     @GetMapping("/{currency}")
     @PreAuthorize("hasRole('ROLE_EXCHANGE')")
     public Double getExchange(@PathVariable CurrencyEnum currencyEnum) {
-        return exchangeService.getExchange(currency);
+        return exchangeService.getExchange(currencyEnum);
     }
 }

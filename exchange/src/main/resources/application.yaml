@@ -1,0 +1,45 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: exchange-api
+  config:
+    import: 'optional:consul:'
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        register-health-check: false
+      config:
+        enabled: true
+        format: yaml
+        prefix: config
+        defaultContext: application
+  datasource:
+    #url: jdbc:h2:mem:usersdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #username: sa
+    #password:
+    url: jdbc:postgresql://localhost:5432/bank
+    username: postgres
+    password: admin
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+  jpa:
+    hibernate:
+      #ddl-auto: none          #Ничего не делает
+      #ddl-auto: create        #Создаёт таблицы каждый раз с нуля (удаляет старые данные!)
+      #ddl-auto: create-drop   #Создаёт при старте, удаляет при завершении
+      #ddl-auto: update        #Создаёт недостающие таблицы и колонки, не удаляя данные
+      #ddl-auto: validate      #Проверяет соответствие между сущностями и таблицами, но не изменяет БД
+      ddl-auto: update
+    show-sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8089/realms/bank
