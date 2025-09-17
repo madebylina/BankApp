@@ -32,6 +32,7 @@
 	<module>cash</module>
 	<module>exchange-generator</module>
 	<module>exchange</module>
+	<module>front-ui</module>
 </modules>
 
 
