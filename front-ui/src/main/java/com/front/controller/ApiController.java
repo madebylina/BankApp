@@ -1,6 +1,7 @@
 package com.front.controller;
 
 import com.front.dto.RateDto;
+import com.front.service.TransferApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +25,10 @@ public class ApiController {
      * value - курс валюты по отношению к рублю (для рубля 1)
      */
     @GetMapping("/rates")
-    public TransferApiService getTransferApiService() {
-        List<RateDto> getRates () {
-            return transferApiService.getExchangeDtoList().stream().map(exchangeDto -> {
-                return new RateDto(exchangeDto.getCurrency().getTitle(), exchangeDto.getCurrency().name(),
-                        exchangeDto.getValue());
-            }).toList();
-        }
+    public List<RateDto> getRates() {
+        return transferApiService.getExchangeDtoList().stream().map(exchangeDto -> {
+            return new RateDto(exchangeDto.getCurrency().getTitle(), exchangeDto.getCurrency().name(), exchangeDto.getValue());
+        }).toList();
     }
+
 }

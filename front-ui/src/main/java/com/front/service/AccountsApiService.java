@@ -41,6 +41,15 @@ public class AccountsApiService {
     }
 
     @CircuitBreaker(name = "cbservice")
+    public UserDto saveUser(UserDto userDto) {
+        return accountsServiceClient.post()
+                .uri("/account/user")
+                .body(userDto)
+                .retrieve()
+                .body(UserDto.class);
+    }
+
+    @CircuitBreaker(name = "cbservice")
     public AccountDto getAccountByUserAndCurrency(Long userId, CurrencyEnum currency) {
         return accountsServiceClient.get()
                 .uri(uriBuilder -> uriBuilder
