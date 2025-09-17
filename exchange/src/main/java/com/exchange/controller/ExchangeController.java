@@ -2,6 +2,7 @@ package com.exchange.controller;
 
 import com.exchange.model.dto.CurrencyEnum;
 import com.exchange.model.dto.ExchangeDto;
+import com.exchange.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
