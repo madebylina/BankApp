@@ -27,10 +27,7 @@
 		<module>exchange-generator</module>
 		<module>notifications</module>
 		<module>blocker</module>
-		<module>notifications</module>
-		<module>transfer</module>
 	</modules>
-
 
 
 	<dependencies>
