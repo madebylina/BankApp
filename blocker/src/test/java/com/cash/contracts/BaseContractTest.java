@@ -1,4 +1,4 @@
-package com.blocker.contracts;
+package com.cash.contracts;
 
 import com.blocker.controller.BlockerController;
 import com.blocker.service.BlockerService;

@@ -21,9 +21,17 @@
         <module name="front-ui" />
         <module name="exchange" />
         <module name="accounts" />
-        <module name="cash" />
         <module name="exchange-generator" />
         <module name="notifications" />
+      </profile>
+      <profile name="Annotation profile for cash" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="cash" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
