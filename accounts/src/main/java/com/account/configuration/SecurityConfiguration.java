@@ -35,6 +35,7 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         return security
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/actuator/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(customizer -> customizer
@@ -102,7 +103,7 @@ public class SecurityConfiguration {
         return RestClient.builder()
                 .requestInterceptor(((request, body, execution) -> {
                     OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-                            .withClientRegistrationId("keycloack")
+                            .withClientRegistrationId("keycloak")
                             .principal("system")
                             .build();
 
