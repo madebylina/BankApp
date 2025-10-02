@@ -3,6 +3,7 @@ package com.transfer.service;
 import com.transfer.dto.TransferDto;
 import com.transfer.dto.UserDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
@@ -14,8 +15,9 @@ public class AccountsApiService {
 
     private final RestClient accountsServiceClient;
 
-    public AccountsApiService(RestClient.Builder builder) {
-        this.accountsServiceClient = builder.baseUrl("http://accounts-api/api").build();
+    public AccountsApiService(RestClient.Builder builder,
+                              @Value("${appservices.accounts-api:http://accounts-api/api}") String baseUrl) {
+        this.accountsServiceClient = builder.baseUrl(baseUrl).build();
     }
 
     @CircuitBreaker(name = "cbservice")
