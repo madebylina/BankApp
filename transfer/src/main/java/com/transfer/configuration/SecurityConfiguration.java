@@ -24,6 +24,7 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         return security
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/actuator/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(customizer -> customizer
@@ -64,7 +65,6 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @LoadBalanced
     public RestClient.Builder restClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager) {
 
         return RestClient.builder()
