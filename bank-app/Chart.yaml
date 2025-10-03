@@ -1,0 +1,43 @@
+apiVersion: v2
+name: bank-app
+description: Umbrella chart for bank app
+type: application
+version: 0.1.0
+
+dependencies:
+
+  - name: keycloak
+    version: "0.1.0"
+    repository: "file://./charts/keycloak"
+
+  - name: postgresql
+    version: "14.2.3"
+    repository: "https://charts.bitnami.com/bitnami"
+
+  - name: exchange-api
+    version: "0.1.0"
+    repository: "file://./charts/exchange-api"
+
+  - name: exchange-generator
+    version: "0.1.0"
+    repository: "file://./charts/exchange-generator"
+
+  - name: blocker-api
+    version: "0.1.0"
+    repository: "file://./charts/blocker-api"
+
+  - name: notifications-api
+    version: "0.1.0"
+    repository: "file://./charts/notifications-api"
+
+  - name: transfer-api
+    version: "0.1.0"
+    repository: "file://./charts/transfer-api"
+
+  - name: cash-api
+    version: "0.1.0"
+    repository: "file://./charts/cash-api"
+
+  - name: front-ui
+    version: "0.1.0"
+    repository: "file://./charts/front-ui"

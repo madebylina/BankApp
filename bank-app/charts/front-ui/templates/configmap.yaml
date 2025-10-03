@@ -1,0 +1,9 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: front-ui-config-map
+data:
+  {{- range $key, $value := .Values.global }}
+    {{ $key }}: "{{ $value }}"
+    {{- end }}

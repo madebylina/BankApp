@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    environment {
+        SHARED_REPO = '../shared/BankApp' // рабочая папка на jenkins
+        IMAGE_NAME = "keycloak" // название образа
+    }
+
+    stages {
+        stage('Get from github') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    echo 'get'
+                    git branch: 'main', url: 'https://github.com/mynameisSergey/BankApp.git'
+                }
+            }
+        }
+
+        stage('Deploy Keycloak') {
+            steps {
+                dir("${SHARED_REPO}/bank-app/charts/${IMAGE_NAME}") {
+                    sh """
+                    helm upgrade --install bank-app-keycloak . \
+                      --namespace default \
+                      --create-namespace
+                    """
+                }
+            }
+        }
+    }
+
+}
