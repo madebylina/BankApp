@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exchange-api-config-map
+data:
+  {{- range $key, $value := .Values.global }}
+    {{ $key }}: "{{ $value }}"
+    {{- end }}
+
+    SPRING_DATASOURCE_URL: "jdbc:postgresql://bank-app-postgresql:5432/bank"
+    SPRING_DATASOURCE_USERNAME: "postgres"
