@@ -1,0 +1,5 @@
+apiVersion: v2
+name: accounts-api
+description: Bank accounts-api microservice
+type: application
+version: 0.1.0
