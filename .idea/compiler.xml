@@ -14,11 +14,11 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="blocker" />
         <module name="front-ui" />
         <module name="transfer" />
-        <module name="jenkins" />
         <module name="exchange" />
         <module name="accounts" />
         <module name="cash" />
@@ -29,6 +29,7 @@
     <bytecodeTargetLevel>
       <module name="bank-app" target="17" />
       <module name="consul" target="23" />
+      <module name="jenkins" target="17" />
       <module name="keycloak" target="17" />
     </bytecodeTargetLevel>
   </component>

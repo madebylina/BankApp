@@ -1,0 +1,30 @@
+dependencies:
+- name: keycloak
+  repository: file://./charts/keycloak
+  version: 0.1.0
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 14.2.3
+- name: exchange-api
+  repository: file://./charts/exchange-api
+  version: 0.1.0
+- name: exchange-generator
+  repository: file://./charts/exchange-generator
+  version: 0.1.0
+- name: blocker-api
+  repository: file://./charts/blocker-api
+  version: 0.1.0
+- name: notifications-api
+  repository: file://./charts/notifications-api
+  version: 0.1.0
+- name: transfer-api
+  repository: file://./charts/transfer-api
+  version: 0.1.0
+- name: cash-api
+  repository: file://./charts/cash-api
+  version: 0.1.0
+- name: front-ui
+  repository: file://./charts/front-ui
+  version: 0.1.0
+digest: sha256:45beae78f9febdb25760c381d99bc7b4cf9ccfe0f50728c0f922ee91023289f6
+generated: "2025-10-0314:50:14.4806979+03:00"

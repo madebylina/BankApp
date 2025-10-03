@@ -28,8 +28,8 @@
 		<module>notifications</module>
 		<module>blocker</module>
         <module>jenkins</module>
-        <module>bank-app</module>
-    </modules>
+		<module>bank-app</module>
+	</modules>
 
 
 	<dependencies>
