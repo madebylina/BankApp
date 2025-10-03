@@ -14,27 +14,20 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="blocker" />
-        <module name="transfer" />
         <module name="front-ui" />
+        <module name="transfer" />
+        <module name="jenkins" />
         <module name="exchange" />
         <module name="accounts" />
+        <module name="cash" />
         <module name="exchange-generator" />
         <module name="notifications" />
       </profile>
-      <profile name="Annotation profile for cash" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="cash" />
-      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="bank-app" target="17" />
       <module name="consul" target="23" />
       <module name="keycloak" target="17" />
     </bytecodeTargetLevel>
@@ -43,11 +36,13 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="BankApp" options="-parameters" />
       <module name="accounts" options="-parameters" />
+      <module name="bank-app" options="-parameters" />
       <module name="blocker" options="-parameters" />
       <module name="cash" options="-parameters" />
       <module name="exchange" options="-parameters" />
       <module name="exchange-generator" options="-parameters" />
       <module name="front-ui" options="-parameters" />
+      <module name="jenkins" options="-parameters" />
       <module name="keycloak" options="-parameters" />
       <module name="notifications" options="-parameters" />
       <module name="transfer" options="-parameters" />

@@ -27,7 +27,9 @@
 		<module>exchange-generator</module>
 		<module>notifications</module>
 		<module>blocker</module>
-	</modules>
+        <module>jenkins</module>
+        <module>bank-app</module>
+    </modules>
 
 
 	<dependencies>
