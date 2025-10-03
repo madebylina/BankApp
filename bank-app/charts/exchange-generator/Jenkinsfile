@@ -1,0 +1,91 @@
+pipeline {
+    agent any
+
+    environment {
+        SHARED_REPO = '../shared/BankApp' // рабочая папка на jenkins
+        IMAGE_NAME = "exchange-generator" // название образа
+        MODULE_NAME = "exchange-generator" // папка модуля
+    }
+
+    stages {
+
+        stage('Get from github') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    echo 'get'
+                    git branch: 'main', url: 'https://github.com/mynameisSergey/BankApp.git'
+                }
+            }
+        }
+
+        stage('Create GHCR Secret in K8s') {
+            steps {
+                script {
+                    // Удаляем старый секрет, если он есть
+                    sh "kubectl delete secret ghcr-secret --ignore-not-found=true"
+
+                    // Создаём новый секрет с токеном из Jenkins Credentials
+                    withCredentials([string(credentialsId: 'GHCR_TOKEN', variable: 'GHCR_TOKEN')]) {
+                        sh """
+                        kubectl create secret docker-registry ghcr-secret \
+                          --docker-server=ghcr.io \
+                          --docker-username=${GITHUB_USERNAME} \
+                          --docker-password=${GHCR_TOKEN}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Clean and build') {
+            steps {
+                dir("${SHARED_REPO}/${MODULE_NAME}") {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                dir("${SHARED_REPO}/${MODULE_NAME}") {
+                    sh 'docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME} .'
+                }
+            }
+        }
+
+        stage('Push Image to Registry') {
+            steps {
+                withCredentials([string(credentialsId: 'GHCR_TOKEN', variable: 'GHCR_TOKEN')]) {
+                    sh """
+                      echo ${GHCR_TOKEN} | docker login ghcr.io -u ${GITHUB_USERNAME} --password-stdin
+                      docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
+                    """
+                }
+            }
+        }
+
+        stage('Helm dependency update') {
+            steps {
+                dir("${SHARED_REPO}/bank-app") {
+                    sh """
+                    helm dependency update .
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir("${SHARED_REPO}/bank-app/charts/${IMAGE_NAME}") {
+                    sh """
+                    helm upgrade --install bank-app-${IMAGE_NAME} . \
+                      --values ../../values.yaml \
+                      --set image.repository=${DOCKER_REGISTRY}/${IMAGE_NAME} \
+                      --set imagePullSecrets[0].name=ghcr-secret
+                    """
+                }
+            }
+        }
+
+    }
+}
