@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Deploy PostgreSQL') {
+            steps {
+                script {
+                    // Добавляем репозиторий bitnami (если еще не добавлен)
+                    sh 'helm repo add bitnami https://charts.bitnami.com/bitnami || true'
+                    sh 'helm repo update'
+
+                    // Деплоим только postgresql
+                    sh '''
+                        helm upgrade --install bank-app-postgresql bitnami/postgresql \
+                          --namespace default \
+                          --set auth.username=postgres \
+                          --set auth.password=admin \
+                          --set auth.database=bank \
+                          --version 14.2.3
+                    '''
+                }
+            }
+        }
+    }
+}
