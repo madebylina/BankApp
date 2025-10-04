@@ -150,6 +150,7 @@ pipeline {
             }
         }
 
+
         stage('Deploy to Kubernetes prod') {
             steps {
                 dir("${SHARED_REPO}/bank-app") {
