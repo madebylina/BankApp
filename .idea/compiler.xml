@@ -16,8 +16,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="blocker" />
-        <module name="transfer" />
         <module name="front-ui" />
+        <module name="transfer" />
         <module name="exchange" />
         <module name="accounts" />
         <module name="cash" />
