@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notifications-api-config-map
+data:
+  {{- range $key, $value := .Values.global }}
+    {{ $key }}: "{{ $value }}"
+    {{- end }}
