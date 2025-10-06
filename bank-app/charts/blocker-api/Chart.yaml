@@ -1,0 +1,5 @@
+apiVersion: v2
+name: blocker-api
+description: Bank blocker-api microservice
+type: application
+version: 0.1.0

@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: exchange-generator
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8085
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+initContainers:
+  - name: wait-for-exchange-api
+    image: busybox:1.36
+    command: ['sh', '-c', 'until nc -z bank-app-exchange-api 8084; do echo "Waiting for exchange-api..."; sleep 3; done']
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8085
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8085
+  initialDelaySeconds: 30
+  periodSeconds: 20
+
+serviceAccount:
+  create: false
+  name: default
+  automount: false

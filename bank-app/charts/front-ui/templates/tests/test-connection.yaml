@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "front-ui.fullname" . }}-test-connection"
+  labels:
+    {{- include "front-ui.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ["--spider", "--server-response", "http://bank-app-front-ui:8080/actuator/health"]
+  restartPolicy: Never

@@ -26,7 +26,6 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @LoadBalanced
     public RestClient.Builder restClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager) {
 
         return RestClient.builder()

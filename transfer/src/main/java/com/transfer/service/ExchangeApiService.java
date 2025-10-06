@@ -2,6 +2,7 @@ package com.transfer.service;
 
 import com.transfer.dto.CurrencyEnum;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -10,8 +11,9 @@ public class ExchangeApiService {
 
     private final RestClient exchangeServiceClient;
 
-    public ExchangeApiService(RestClient.Builder builder) {
-        this.exchangeServiceClient = builder.baseUrl("http://exchange-api/api").build();
+    public ExchangeApiService(RestClient.Builder builder,
+                              @Value("${appservices.exchange-api:http://exchange-api/api}") String baseUrl) {
+        this.exchangeServiceClient = builder.baseUrl(baseUrl).build();
     }
 
     @CircuitBreaker(name = "cbservice")

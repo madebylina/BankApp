@@ -52,8 +52,6 @@ public class SecurityConfiguration {
                 });
     }
 
-
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         return security

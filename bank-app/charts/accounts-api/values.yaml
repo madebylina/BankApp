@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: accounts-api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8081
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+initContainers:
+  - name: wait-for-notifications-api
+    image: busybox:1.36
+    command: ['sh', '-c', 'until nc -z bank-app-notifications-api 8086; do echo "Waiting for notifications-api..."; sleep 3; done']
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8081
+  initialDelaySeconds: 40
+  periodSeconds: 10
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8081
+  initialDelaySeconds: 40
+  periodSeconds: 20
+
+serviceAccount:
+  create: false
+  name: default
+  automount: false

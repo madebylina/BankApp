@@ -1,0 +1,185 @@
+pipeline {
+    agent any
+
+    environment {
+        SHARED_REPO = '../shared/BankApp' // рабочая папка на jenkins
+    }
+
+    stages {
+
+        stage('Get from github') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    echo 'get'
+                    git branch: 'main', url: 'https://github.com/mynameisSergey/BankApp.git'
+                }
+            }
+        }
+
+        stage('Clean and build') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    sh 'docker build -t ${DOCKER_REGISTRY}/exchange-api ./exchange'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/exchange-generator ./exchange-generator'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/blocker-api ./blocker'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/notifications-api ./notifications'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/accounts-api ./accounts'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/transfer-api ./transfer'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/cash-api ./cash'
+                    sh 'docker build -t ${DOCKER_REGISTRY}/front-ui ./front-ui'
+                }
+            }
+        }
+
+        stage('Push Image to Registry') {
+            steps {
+                withCredentials([string(credentialsId: 'GHCR_TOKEN', variable: 'GHCR_TOKEN')]) {
+                    sh """
+                      echo ${GHCR_TOKEN} | docker login ghcr.io -u ${GITHUB_USERNAME} --password-stdin
+                      docker push ${DOCKER_REGISTRY}/exchange-api
+                      docker push ${DOCKER_REGISTRY}/exchange-generator
+                      docker push ${DOCKER_REGISTRY}/blocker-api
+                      docker push ${DOCKER_REGISTRY}/notifications-api
+                      docker push ${DOCKER_REGISTRY}/accounts-api
+                      docker push ${DOCKER_REGISTRY}/transfer-api
+                      docker push ${DOCKER_REGISTRY}/cash-api
+                      docker push ${DOCKER_REGISTRY}/front-ui
+                    """
+                }
+            }
+        }
+
+        stage('Helm dependency update') {
+            steps {
+                dir("${SHARED_REPO}/bank-app") {
+                    sh """
+                    helm dependency update .
+                    """
+                }
+            }
+        }
+
+        stage('Create GHCR test Secret in K8s') {
+            steps {
+                script {
+                    // Создаём namespace, если его нет
+                    sh "kubectl get namespace test || kubectl create namespace test"
+
+                    // Удаляем старый секрет, если он есть
+                    sh "kubectl delete secret ghcr-secret -n test --ignore-not-found=true"
+
+                    // Создаём новый секрет с токеном из Jenkins Credentials
+                    withCredentials([string(credentialsId: 'GHCR_TOKEN', variable: 'GHCR_TOKEN')]) {
+                        sh """
+                        kubectl create secret docker-registry ghcr-secret \
+                          --namespace test \
+                          --docker-server=ghcr.io \
+                          --docker-username=${GITHUB_USERNAME} \
+                          --docker-password=${GHCR_TOKEN}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes test') {
+            steps {
+                dir("${SHARED_REPO}/bank-app") {
+                    sh """
+                    echo "${DOCKER_REGISTRY}"
+                    helm upgrade --install bank-app . \
+                      --namespace test --create-namespace \
+                      --set exchange-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set exchange-api.image.repository=${DOCKER_REGISTRY}/exchange-api \
+                      --set exchange-generator.imagePullSecrets[0].name=ghcr-secret \
+                      --set exchange-generator.image.repository=${DOCKER_REGISTRY}/exchange-generator \
+                      --set blocker-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set blocker-api.image.repository=${DOCKER_REGISTRY}/blocker-api \
+                      --set notifications-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set notifications-api.image.repository=${DOCKER_REGISTRY}/notifications-api \
+                      --set accounts-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set accounts-api.image.repository=${DOCKER_REGISTRY}/accounts-api \
+                      --set transfer-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set transfer-api.image.repository=${DOCKER_REGISTRY}/transfer-api \
+                      --set cash-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set cash-api.image.repository=${DOCKER_REGISTRY}/cash-api \
+                      --set front-ui.imagePullSecrets[0].name=ghcr-secret \
+                      --set front-ui.image.repository=${DOCKER_REGISTRY}/front-ui \
+                      --set front-ui.ingress.hosts[0].host=bankapp-test \
+                      --set front-ui.ingress.hosts[0].paths[0].path=/ \
+                      --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix
+                    """
+                }
+            }
+        }
+
+        stage('Manual Approval for PROD') {
+            steps {
+                input message: 'Deploy to PROD environment?', ok: 'Yes, deploy'
+            }
+        }
+
+        stage('Create GHCR prod Secret in K8s') {
+            steps {
+                script {
+                    // Создаём namespace, если его нет
+                    sh "kubectl get namespace prod || kubectl create namespace prod"
+
+                    // Удаляем старый секрет, если он есть
+                    sh "kubectl delete secret ghcr-secret -n prod --ignore-not-found=true"
+
+                    // Создаём новый секрет с токеном из Jenkins Credentials
+                    withCredentials([string(credentialsId: 'GHCR_TOKEN', variable: 'GHCR_TOKEN')]) {
+                        sh """
+                        kubectl create secret docker-registry ghcr-secret \
+                          --namespace prod \
+                          --docker-server=ghcr.io \
+                          --docker-username=${GITHUB_USERNAME} \
+                          --docker-password=${GHCR_TOKEN}
+                        """
+                    }
+                }
+            }
+        }
+
+
+        stage('Deploy to Kubernetes prod') {
+            steps {
+                dir("${SHARED_REPO}/bank-app") {
+                    sh """
+                    helm upgrade --install bank-app . \
+                      --namespace prod --create-namespace \
+                      --set exchange-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set exchange-api.image.repository=${DOCKER_REGISTRY}/exchange-api \
+                      --set exchange-generator.imagePullSecrets[0].name=ghcr-secret \
+                      --set exchange-generator.image.repository=${DOCKER_REGISTRY}/exchange-generator \
+                      --set blocker-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set blocker-api.image.repository=${DOCKER_REGISTRY}/blocker-api \
+                      --set notifications-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set notifications-api.image.repository=${DOCKER_REGISTRY}/notifications-api \
+                      --set accounts-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set accounts-api.image.repository=${DOCKER_REGISTRY}/accounts-api \
+                      --set transfer-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set transfer-api.image.repository=${DOCKER_REGISTRY}/transfer-api \
+                      --set cash-api.imagePullSecrets[0].name=ghcr-secret \
+                      --set cash-api.image.repository=${DOCKER_REGISTRY}/cash-api \
+                      --set front-ui.imagePullSecrets[0].name=ghcr-secret \
+                      --set front-ui.image.repository=${DOCKER_REGISTRY}/front-ui \
+                      --set front-ui.ingress.hosts[0].host=BankApp-prod \
+                      --set front-ui.ingress.hosts[0].paths[0].path=/ \
+                      --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix
+                    """
+                }
+            }
+        }
+
+    }
+}

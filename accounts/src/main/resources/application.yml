@@ -4,26 +4,11 @@ server:
 spring:
   application:
     name: accounts-api
-  config:
-    import: 'optional:consul:'
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        register-health-check: false
-      config:
-        enabled: true
-        format: yaml
-        prefix: config
-        defaultContext: application
+
   datasource:
-    #url: jdbc:h2:mem:usersdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    #username: sa
-    #password:
-    url: jdbc:postgresql://localhost:5432/bank
-    username: postgres
-    password: admin
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/bank}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:admin}
   sql:
     init:
       mode: always

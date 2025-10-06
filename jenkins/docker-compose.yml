@@ -1,0 +1,28 @@
+services:
+  jenkins:
+    build: .
+    container_name: jenkins
+    user: root
+    env_file:
+      - .env
+    ports:
+      - "9090:8080"
+      - "50000:50000"
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      - JENKINS_USER=admin
+      - JENKINS_PASS=admin
+      # Docker host на Windows
+      - DOCKER_HOST=tcp://host.docker.internal:2375
+    volumes:
+      - ./jenkins-volume:/var/jenkins_home
+      - ./jenkins-m2:/root/.m2
+      - ${KUBECONFIG_PATH}:/root/.kube/config:ro
+      - ${MINIKUBE_PATH}/profiles/minikube/client.crt:/root/.minikube/profiles/minikube/client.crt:ro
+      - ${MINIKUBE_PATH}/profiles/minikube/client.key:/root/.minikube/profiles/minikube/client.key:ro
+    networks:
+      - minikube
+
+networks:
+  minikube:
+    external: true

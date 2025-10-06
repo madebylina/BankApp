@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "notifications-api.fullname" . }}-test-connection"
+  labels:
+    {{- include "notifications-api.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "notifications-api.fullname" . }}:{{ .Values.service.port }}']
+      args: ["--spider", "--server-response", "http://bank-app-notifications-api:8086/actuator/health"]
+  restartPolicy: Never

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: notifications-api
+description: Bank notifications-api microservice
+type: application
+version: 0.1.0

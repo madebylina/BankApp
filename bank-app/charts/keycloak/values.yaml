@@ -1,0 +1,55 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/keycloak/keycloak
+  tag: "26.1.3"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  clusterIP: None
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 120
+  periodSeconds: 10
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 120
+  periodSeconds: 10
+
+command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start-dev"
+  - "--http-enabled=true"
+  - "--hostname-strict=false"
+  - "--import-realm"
+
+volumeMounts:
+  - name: realm-import-volume
+    mountPath: /opt/keycloak/data/import/bank-realm.json
+    subPath: bank-realm.json
+
+volumes:
+  - name: realm-import-volume
+    configMap:
+      name: keycloak-realm-import-config-map
+
+serviceAccount:
+  create: true
+  name: ""

@@ -1,0 +1,12 @@
+workflow-aggregator
+workflow-job
+workflow-multibranch
+git
+git-client
+github
+github-branch-source
+scm-api
+credentials
+docker-workflow
+credentials-binding
+plain-credentials

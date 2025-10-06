@@ -85,15 +85,158 @@
 
 _Для подробностей смотрите [схему на GitHub](https://github.com/mynameisSergey/BankApp/blob/main/image/schema.png)._
 
+📌 Описание проекта
 
-## тестирование и запуск
-для тестирования и запуска сначала делаем install для всего приложения,
+Приложение состоит из следующих частей:
 
-затем запускаем docker-compose.yml в корне приложения
+⦁ postgresql
+⦁ nginx
+⦁ keycloak с конфигурацией
+⦁ notifications — сервис уведомлений
+⦁ blocker — сервис блокировки операций
+⦁ exchange-generator — генератор курсов валют
+⦁ exchange — хранение курсов валют
+⦁ cash — ввод/вывод наличных
+⦁ transfer — переводы между счетами
+⦁ accounts — хранение информации о пользователях и счетах
+⦁ front-ui — веб-клиент
 
-пользовательский интерфейс будет доступен по адресу http://localhost:8080/
+————————
 
-keycloak будет доступен по адресу http://localhost:8089/, используется realm "bank"
+📌 Запуск приложения с Helm на Windows 10
 
-consul будет доступен по адресу http://localhost:8500/
+1. Собрать все модули Maven пакетом  
+   Выполнить из корня проекта:
 
+   mvn clean package
+
+
+2. Запустить Minikube с Docker драйвером:
+
+   minikube start --driver=docker
+
+
+3. Установить ingress-nginx контроллер:
+
+   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+   helm repo update
+   helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+
+
+4. Использовать Docker внутри Minikube:
+
+   minikube docker-env | Invoke-Expression
+
+
+5. Построить docker-образы сервисов:
+
+   docker build -t exchange-api./exchange
+   docker build -t exchange-generator./exchange-generator
+   docker build -t blocker-api./blocker
+   docker build -t notifications-api./notifications
+   docker build -t accounts-api./accounts
+   docker build -t transfer-api./transfer
+   docker build -t cash-api./cash
+   docker build -t front-ui./front-ui
+
+
+6. Обновить зависимости Helm чарта:
+
+   helm dependency update./bank-app
+
+
+7. Установить приложение через Helm в текущий кластер:
+
+   helm install bank-app./bank-app
+
+
+8. Проверить готовность подов:
+
+   kubectl get pods
+
+
+9. Перенаправить порт для фронтенда:
+
+   kubectl port-forward svc/bank-app-front-ui 8080:8080
+
+   Открыть в браузере: http://localhost:8080/
+
+10. (Опционально) Добавить удобный хост в etc/hosts:
+
+    127.0.0.1 bankapp
+
+    И запустить:
+
+    minikube tunnel
+
+    После откроется: http://bankapp/
+
+————————
+
+📌 Остановка приложения
+
+helm uninstall bank-app
+
+
+————————
+
+📌 Запуск Jenkins в Windows 10 с интеграцией Minikube и Docker
+
+1. В настройках Docker Desktop включить:
+
+   Settings -> General -> Expose daemon on tcp://localhost:2375 without TLS
+
+
+2. В файле jenkins/.env прописать переменные:
+   ⦁ MINIKUBE_PATH — путь к профилю minikube (напр. C:/Users/your_user/.minikube)
+   ⦁ GHCR_TOKEN — токен GitHub Container Registry
+   ⦁ GITHUB_USERNAME — имя пользователя GitHub
+   ⦁ DOCKER_REGISTRY — адрес Docker Registry
+
+3. Запустить Jenkins через docker-compose в каталоге jenkins:
+
+   docker-compose up -d
+
+
+4. Подключить Jenkins к Docker-сети Minikube:
+
+   docker network connect minikube jenkins
+
+
+————————
+
+📌 Запуск отдельных Helm-чартов для каждого сервиса
+
+В Jenkins запускать сборки в следующем порядке, каждый отдельным чартом в namespace default:
+
+01_keycloak
+02_postgresql
+03_exchange-api
+04_exchange-generator
+05_blocker-api
+06_notifications-api
+07_accounts-api
+08_transfer-api
+09_cash-api
+10_front-ui
+
+
+————————
+
+📌 Запуск всего приложения целиком в namespace test (и опционально prod)
+
+В Jenkins запустить сборку:
+
+00_bank-app
+
+
+Добавить в etc/hosts:
+
+127.0.0.1 BankApp-test
+127.0.0.1 BankApp-prod
+
+
+После запуска перейти в браузере:
+
+⦁ Тестовое: http://BankApp-test/
+⦁ Продуктовое: http://BankApp-prod/

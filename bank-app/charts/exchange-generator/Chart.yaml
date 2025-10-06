@@ -1,0 +1,5 @@
+apiVersion: v2
+name: exchange-generator
+description: Bank exchange-generator microservice
+type: application
+version: 0.1.0

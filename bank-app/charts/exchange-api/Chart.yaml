@@ -1,0 +1,5 @@
+apiVersion: v2
+name: exchange-api
+description: Bank exchange-api microservice
+type: application
+version: 0.1.0

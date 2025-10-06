@@ -4,19 +4,6 @@ server:
 spring:
   application:
     name: notifications-api
-  config:
-    import: 'optional:consul:'
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        register-health-check: false
-      config:
-        enabled: true
-        format: yaml
-        prefix: config
-        defaultContext: application
 
   security:
     oauth2:
