@@ -1,0 +1,6 @@
+# Игнорируем папки и файлы IDE и сборки
+/.idea
+/.mvn
+/target
+/shelf/
+/workspace.xml
