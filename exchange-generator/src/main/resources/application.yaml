@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: exchange-generator
+  kafka:
+    admin:
+      auto-create: true
+
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   security:
     oauth2:
