@@ -150,7 +150,6 @@ pipeline {
             }
         }
 
-
         stage('Deploy to Kubernetes prod') {
             steps {
                 dir("${SHARED_REPO}/bank-app") {
@@ -173,7 +172,7 @@ pipeline {
                       --set cash-api.image.repository=${DOCKER_REGISTRY}/cash-api \
                       --set front-ui.imagePullSecrets[0].name=ghcr-secret \
                       --set front-ui.image.repository=${DOCKER_REGISTRY}/front-ui \
-                      --set front-ui.ingress.hosts[0].host=BankApp-prod \
+                      --set front-ui.ingress.hosts[0].host=bankapp-prod \
                       --set front-ui.ingress.hosts[0].paths[0].path=/ \
                       --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix
                     """
