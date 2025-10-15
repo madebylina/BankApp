@@ -98,7 +98,6 @@ public class SecurityConfiguration {
      * @return настроенный RestClient.Builder с автоподстановкой OAuth2 токена
      */
     @Bean
-    @LoadBalanced
     public RestClient.Builder restClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager) {
         return RestClient.builder()
                 .requestInterceptor(((request, body, execution) -> {
