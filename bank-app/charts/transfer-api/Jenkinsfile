@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SHARED_REPO = '../shared/bankapp' // рабочая папка на jenkins
+        SHARED_REPO = '../shared/BankApp' // рабочая папка на jenkins
         IMAGE_NAME = "transfer-api" // название образа
         MODULE_NAME = "transfer" // папка модуля
     }

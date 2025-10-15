@@ -1,0 +1,5 @@
+apiVersion: v2
+name: kafka
+description: A Helm chart for Kafka
+version: 0.1.0
+appVersion: "4.0.0"
