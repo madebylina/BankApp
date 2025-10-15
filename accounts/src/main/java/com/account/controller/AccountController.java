@@ -23,6 +23,7 @@ public class AccountController {
 
     private final AccountService accountService;
     private final NotificationsApiService notificationsApiService;
+    private final NotificationProducer notificationProducer;
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ROLE_ACCOUNT')")
@@ -45,7 +46,8 @@ public class AccountController {
     @PostMapping("/user")
     @PreAuthorize("hasRole('ROLE_ACCOUNT')")
     public UserDto saveUser(@RequestBody UserDto userDto) {
-        notificationsApiService.notificate(new NotificationDto(userDto.getUsername(), userDto.toString()));
+        //    notificationsApiService.notificate(new NotificationDto(userDto.getUsername(), userDto.toString()));
+        notificationProducer.notificate(new NotificationDto(userDto.getUsername(), userDto.toString()));
         return accountService.saveUser(userDto);
     }
 
@@ -61,8 +63,8 @@ public class AccountController {
     public AccountDto saveAccount(@RequestBody AccountDto accountDto) {
         NotificationDto notificationDto = new NotificationDto(accountService.getUserById(accountDto.getUserId())
                 .getUsername(), accountDto.toString());
-        notificationsApiService.notificate(notificationDto);
-
+        //  notificationsApiService.notificate(notificationDto);
+        notificationProducer.notificate(notificationDto);
         return accountService.saveAccount(accountDto);
     }
 
