@@ -3,6 +3,7 @@ package com.account.controller;
 import com.account.model.dto.*;
 import com.account.service.AccountService;
 import com.account.service.NotificationsApiService;
+import com.account.service.NotificationsProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class AccountController {
 
     private final AccountService accountService;
     private final NotificationsApiService notificationsApiService;
-    private final NotificationProducer notificationProducer;
+    private final NotificationsProducer notificationProducer;
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ROLE_ACCOUNT')")
