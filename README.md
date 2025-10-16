@@ -90,6 +90,7 @@ _Для подробностей смотрите [схему на GitHub](https
 Приложение состоит из следующих частей:
 
 ⦁ postgresql
+⦁ kafka
 ⦁ nginx
 ⦁ keycloak с конфигурацией
 ⦁ notifications — сервис уведомлений
@@ -209,16 +210,18 @@ helm uninstall bank-app
 
 В Jenkins запускать сборки в следующем порядке, каждый отдельным чартом в namespace default:
 
-01_keycloak
-02_postgresql
-03_exchange-api
-04_exchange-generator
-05_blocker-api
-06_notifications-api
-07_accounts-api
-08_transfer-api
-09_cash-api
-10_front-ui
+01_kafka
+02_keycloak
+03_postgresql
+04_exchange-api
+05_exchange-generator
+06_blocker-api
+07_notifications-api
+08_accounts-api
+09_transfer-api
+10_cash-api
+11_front-ui
+
 
 
 ————————
