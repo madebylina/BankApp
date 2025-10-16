@@ -15,8 +15,9 @@ public class AccountsApiService {
 
     private final RestClient accountsServiceClient;
 
+    // public AccountsApiService(RestClient.Builder builder, @Value("${appservices.accounts-api:http://accounts-api/api}") String baseUrl) {
     public AccountsApiService(RestClient.Builder builder,
-                              @Value("${appservices.accounts-api:http://accounts-api/api}") String baseUrl) {
+                              @Value("${appservices.accounts-api:http://localhost:8081/api}") String baseUrl) {
         this.accountsServiceClient = builder.baseUrl(baseUrl).build();
     }
 
@@ -28,7 +29,7 @@ public class AccountsApiService {
                     .body(transferDto)
                     .retrieve()
                     .toBodilessEntity();
-        }catch (RestClientResponseException restClientResponseException){
+        } catch (RestClientResponseException restClientResponseException) {
             throw new OperationsException(restClientResponseException.getResponseBodyAsString());
         }
     }
