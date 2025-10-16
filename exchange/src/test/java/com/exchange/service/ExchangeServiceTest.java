@@ -1,4 +1,4 @@
-package com.exchange.contracts.service;
+package com.exchange.service;
 
 import com.exchange.model.dto.CurrencyEnum;
 import com.exchange.model.dto.ExchangeDto;
