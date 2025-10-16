@@ -5,6 +5,20 @@ spring:
   application:
     name: notifications-api
 
+  kafka:
+    admin:
+      auto-create: true
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.notifications.dto.NotificationDto
+        spring.json.trusted.packages: "*"
+
   security:
     oauth2:
       resourceserver:
