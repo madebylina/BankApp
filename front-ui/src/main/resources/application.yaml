@@ -1,6 +1,26 @@
 server:
   port: 8080
 
+management:
+  zipkin:
+    tracing:
+      #endpoint:  http://127.0.0.1:9411/api/v2/spans
+      endpoint: ${ZIPKIN_URL:http://127.0.0.1:9411/api/v2/spans}
+  tracing:
+    sampling:
+      probability: 1
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    org.springframework.cloud.sleuth: DEBUG
+    brave: DEBUG
+    org.springframework.web.client: DEBUG
+    com.front.service: DEBUG
+
 spring:
   application:
     name: front-ui
