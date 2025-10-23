@@ -8,10 +8,12 @@ import com.front.service.CashApiService;
 import com.front.service.TransferApiService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
@@ -31,14 +33,16 @@ import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/user")
 public class UserController {
 
     private final PasswordEncoder passwordEncoder;
-    private final BankUserDetailsService userDetailService;
+    private final UserDetailsService userDetailService;
     private final AccountsApiService accountsApiService;
     private final CashApiService cashApiService;
     private final TransferApiService transferApiService;
+    private final CustomMetrics customMetrics;
 
     /**
      * POST "/user/{login}/editPassword" - эндпоинт смены пароля (записывает список ошибок, если есть, в passwordErrors)
@@ -64,6 +68,7 @@ public class UserController {
         userDto.setPassword(passwordEncoder.encode(password));
         userDto = accountsApiService.saveUser(userDto);
         authenticateUser(userDto.getUsername(), request);
+        log.info("Пользователь {} изменил пароль", login);
         return "redirect:/main";
     }
 
@@ -78,7 +83,11 @@ public class UserController {
 
         try {
             cashApiService.cash(cashDto);
+            log.info("Операция с наличностью {}: {} {}", login, value, currency.name());
         } catch (RestClientResponseException restClientResponseException) {
+            if (restClientResponseException.getMessage().equals("409 Conflict: \"Операция заблокирована блокировщиком\"")) {
+                customMetrics.incrementCacsBlocker(login, currency.name());
+            }
             redirectAttributes.addFlashAttribute("cashErrors",
                     List.of(restClientResponseException.getResponseBodyAsString()));
         }
@@ -103,17 +112,26 @@ public class UserController {
         TransferDto transferDto = new TransferDto(fromUserDto.getId(), fromExchangeDto, toExchangeDto, value, toUserDto.getId());
 
         if (login.equals(toLogin) && fromCurrency.equals(toCurrency)) {
+            customMetrics.incrementFailureTransfer(login, fromCurrency.name(), toLogin, toCurrency.name());
             redirectAttributes.addFlashAttribute("transferErrors", List.of("Перевести можно только между разными счетами"));
             return "redirect:/main";
         }
+
         try {
             transferApiService.transfer(transferDto);
+            log.info("Операция перевода от {}: {} {} к {}: {}", login, value, fromCurrency.name(), toLogin, toCurrency.name());
         } catch (RestClientResponseException restClientResponseException) {
             if (login.equals(toLogin)) {
+                if (restClientResponseException.getMessage().equals("409 Conflict: \"Операция заблокирована блокировщиком\"")) {
+                    customMetrics.incrementTransferBlocker(login, fromCurrency.name(), toLogin, toCurrency.name());
+                }
                 transferErrors.add(restClientResponseException.getResponseBodyAsString().formatted(toLogin));
             } else {
                 transferErrors.add(restClientResponseException.getResponseBodyAsString().formatted(toLogin));
             }
+        }
+        if (!transferErrors.isEmpty() || !transferOtherErrors.isEmpty()) {
+            customMetrics.incrementFailureTransfer(login, fromCurrency.name(), toLogin, toCurrency.name());
         }
         redirectAttributes.addFlashAttribute("transferErrors", transferErrors);
         redirectAttributes.addFlashAttribute("transferOtherErrors", transferOtherErrors);
@@ -131,9 +149,9 @@ public class UserController {
 
         UserDto userDto = accountsApiService.getUserByName(login);
 
-        if(Period.between(birthdate, LocalDate.now()).getYears() < 18){
+        if (Period.between(birthdate, LocalDate.now()).getYears() < 18) {
             userAccountsErrors.add("Вам должно быть больше 18 лет");
-        }else {
+        } else {
             userDto.setPersonName(name);
             userDto.setDateOfBirth(birthdate);
             accountsApiService.saveUser(userDto);
@@ -144,9 +162,9 @@ public class UserController {
                     AccountDto accountDto = accountsApiService.getAccountByUserAndCurrency(userDto.getId(), currency);
                     if (accountDto.getExists()) {
                         if (Objects.isNull(selectedCurrencies) || !selectedCurrencies.contains(accountDto.getCurrency().name())) {
-                            if(accountDto.getValue()==0) {
+                            if (accountDto.getValue() == 0) {
                                 accountsApiService.deleteAccount(accountDto);
-                            }else {
+                            } else {
                                 userAccountsErrors.add("Баланс на счету %s не равен 0".formatted(currency.getTitle()));
                             }
                         }
