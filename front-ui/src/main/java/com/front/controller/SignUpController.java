@@ -4,6 +4,7 @@ import com.front.dto.UserDto;
 import com.front.service.AccountsApiService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/signup")
 public class SignUpController {
 
@@ -96,8 +98,10 @@ public class SignUpController {
             model.addAttribute("name", name);
             model.addAttribute("birthdate", birthdate);
             model.addAttribute("errors", errors);
+            return "signup";
         }
         authenticateUser(login, request);
+        log.info("Создан новый аккаунт {}: ", login);
         return "redirect:/main";
     }
 
