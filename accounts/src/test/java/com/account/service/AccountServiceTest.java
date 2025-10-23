@@ -124,7 +124,6 @@ public class AccountServiceTest {
         assertFalse(found.isPresent());
     }
 
-
     @Test
     void testTransfer_shouldSucceed() throws OperationsException {
         User fromUser = entityManager.persist(new User());
