@@ -23,7 +23,6 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
-    private final NotificationsApiService notificationsApiService;
     private final NotificationsProducer notificationProducer;
 
     @GetMapping("/users")

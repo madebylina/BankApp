@@ -100,7 +100,7 @@ public class SecurityConfiguration {
     @Bean
     public RestClient.Builder restClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager) {
         return RestClient.builder()
-                .requestInterceptor(((request, body, execution) -> {
+                .requestInterceptor((request, body, execution) -> {
                     OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
                             .withClientRegistrationId("keycloak")
                             .principal("system")
@@ -113,6 +113,6 @@ public class SecurityConfiguration {
 
                     request.getHeaders().setBearerAuth(client.getAccessToken().getTokenValue());
                     return execution.execute(request, body);
-                }));
+                });
     }
 }
