@@ -4,6 +4,21 @@ server:
 spring:
   application:
     name: exchange-api
+  kafka:
+    admin:
+      auto-create: true
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.exchange.dto.ExchangeDto
+        spring.json.trusted.packages: "*"
+
 
   datasource:
     #url: jdbc:h2:mem:usersdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

@@ -4,10 +4,7 @@ import com.transfer.dto.CurrencyEnum;
 import com.transfer.dto.ExchangeDto;
 import com.transfer.dto.NotificationDto;
 import com.transfer.dto.TransferDto;
-import com.transfer.service.AccountsApiService;
-import com.transfer.service.BlockerApiService;
-import com.transfer.service.ExchangeApiService;
-import com.transfer.service.NotificationsApiService;
+import com.transfer.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +24,7 @@ public class TransferController {
     private final AccountsApiService accountsApiService;
     private final ExchangeApiService exchangeApiService;
     private final NotificationsApiService notificationsApiService;
+    private final NotificationsProducer notificationsProducer;
     private final BlockerApiService blokerApiService;
 
     @PostMapping
@@ -37,8 +35,8 @@ public class TransferController {
         }
         NotificationDto notificationDto = new NotificationDto(accountsApiService.getUserById(transferDto.getUserId())
                 .getUsername(), transferDto.toString());
-        notificationsApiService.notificate(notificationDto);
-
+      //  notificationsApiService.notificate(notificationDto);
+        notificationsProducer.notificate(notificationDto);
         Double fromCurrencyValue = exchangeApiService.getExchangeValue(transferDto.getFromExchange().getCurrency());
         Double toCurrencyValue = exchangeApiService.getExchangeValue(transferDto.getToExchange().getCurrency());
         transferDto.getFromExchange().setValue(fromCurrencyValue);
@@ -49,9 +47,9 @@ public class TransferController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_TRANSFER')")
     public List<ExchangeDto> getExchangeList() throws OperationsException {
-        return Arrays.stream(CurrencyEnum.values()).map(currencyEnum -> {
-            return new ExchangeDto(currencyEnum, exchangeApiService.getExchangeValue(currencyEnum));
-        }).collect(Collectors.toList());
+        return Arrays.stream(CurrencyEnum.values()).map(currencyEnum ->
+                new ExchangeDto(currencyEnum, exchangeApiService.getExchangeValue(currencyEnum)))
+                .collect(Collectors.toList());
     }
 
     @ExceptionHandler(OperationsException.class)

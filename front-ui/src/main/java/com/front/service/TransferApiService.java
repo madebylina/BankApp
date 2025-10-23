@@ -15,8 +15,9 @@ public class TransferApiService {
 
     private final RestClient transferServiceClient;
 
+    // public TransferApiService(RestClient.Builder builder, @Value("${appservices.transfer-api:http://transfer-api/api}") String baseUrl) {
     public TransferApiService(RestClient.Builder builder,
-                              @Value("${appservices.transfer-api:http://transfer-api/api}") String baseUrl) {
+                              @Value("${appservices.transfer-api:http://localhost:8083/api}") String baseUrl) {
         this.transferServiceClient = builder.baseUrl(baseUrl).build();
     }
 

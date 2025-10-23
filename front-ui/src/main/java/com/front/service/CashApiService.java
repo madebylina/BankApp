@@ -11,8 +11,9 @@ public class CashApiService {
 
     private final RestClient cashServiceClient;
 
+    //  public CashApiService(RestClient.Builder builder, @Value("${appservices.cash-api:http://cash-api/api}") String baseUrl) {
     public CashApiService(RestClient.Builder builder,
-                          @Value("${appservices.cash-api:http://cash-api/api}") String baseUrl) {
+                          @Value("${appservices.cash-api:http://localhost:8082/api}") String baseUrl) {
         this.cashServiceClient = builder.baseUrl(baseUrl).build();
     }
 

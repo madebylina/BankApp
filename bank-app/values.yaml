@@ -1,26 +1,14 @@
 global:
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://bank-app-keycloak:8080/realms/bank"
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://bank-app-keycloak:8080/realms/bank"
+  SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "bank-app-kafka:9092"
+  SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: "bank-app-kafka:9092"
   APPSERVICES_EXCHANGE-API: "http://bank-app-exchange-api:8084/api"
   APPSERVICES_ACCOUNTS-API: "http://bank-app-accounts-api:8081/api"
   APPSERVICES_CASH-API: "http://bank-app-cash-api:8082/api"
   APPSERVICES_TRANSFER-API: "http://bank-app-transfer-api:8083/api"
   APPSERVICES_BLOCKER-API: "http://bank-app-blocker-api:8087/api"
   APPSERVICES_NOTIFICATIONS-API: "http://bank-app-notifications-api:8086/api"
-
-#keycloak:
-#  ingress:
-#    enabled: true
-#    className: nginx
-#    hosts:
-#      - host: ""
-#        paths:
-#          - path: /
-#            pathType: Prefix
-#      - host: keycloak.example.com
-#        paths:
-#          - path: /
-#            pathType: Prefix
 
 postgresql:
   enabled: true
@@ -72,7 +60,7 @@ front-ui:
     enabled: true
     className: "nginx"
     hosts:
-      - host: BankApp
+      - host: bankapp
         paths:
           - path: /
             pathType: Prefix
