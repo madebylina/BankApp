@@ -19,4 +19,3 @@ Contract.make {
         }
     }
 }
-
