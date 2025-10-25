@@ -6,6 +6,7 @@ import com.cash.dto.UserDto;
 import com.cash.service.AccountsApiService;
 import com.cash.service.BlockerApiService;
 import com.cash.service.NotificationsApiService;
+import com.cash.service.NotificationsProducer;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
