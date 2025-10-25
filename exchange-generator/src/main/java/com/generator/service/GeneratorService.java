@@ -14,12 +14,10 @@ import java.util.List;
 @Service
 public class GeneratorService {
 
-    private final ExchangeApiService exchangeApiService;
     private final ExchangeProducer exchangeProducer;
     private final List<ExchangeDto> exchangeDtoList = new ArrayList<>();
 
     public GeneratorService(ExchangeApiService exchangeApiService, ExchangeProducer exchangeProducer) {
-        this.exchangeApiService = exchangeApiService;
         this.exchangeProducer = exchangeProducer;
 
         ExchangeDto rub = new ExchangeDto(CurrencyEnum.RUB, 1D);
@@ -40,7 +38,6 @@ public class GeneratorService {
                     exchangeDto.setValue(exchangeDto.getValue() + change);
                 }
             }
-         //   exchangeApiService.setExchange(exchangeDto);
             exchangeProducer.setExchange(exchangeDto);
             System.out.println(exchangeDto);
         });
