@@ -1,0 +1,5 @@
+apiVersion: v2
+name: logstash
+description: A Helm chart for Logstash
+version: 0.1.0
+appVersion: "9.0.0"

@@ -1,0 +1,76 @@
+{
+  "id": null,
+  "title": "Метрики bankapp",
+  "tags": ["bankapp"],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Логины пользователей (за 5м)",
+      "targets": [
+        {
+          "expr": "increase(user_login_success_total[5m])",
+          "legendFormat": "успешных логинов",
+          "refId": "A"
+        },
+        {
+          "expr": "increase(user_login_failure_total[5m])",
+          "legendFormat": "неуспешных логинов",
+          "refId": "B"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 6 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Неуспешные переводы (за 5м)",
+      "targets": [
+        {
+          "expr": "increase(transfer_failure_total[5m])",
+          "legendFormat": "неуспешных переводов",
+          "refId": "C"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 6, "w": 24, "h": 6 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Заблокировано операций (за 10м)",
+      "targets": [
+        {
+          "expr": "sum(increase(transfer_blocker_total[10m])) + sum(increase(cash_blocker_total[10m]))",
+          "legendFormat": "заблокировано операций",
+          "refId": "D"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 12, "w": 24, "h": 6 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Сбой отправки уведомлений (за 5м)",
+      "targets": [
+        {
+          "expr": "increase(notifications_failure_total[5m])",
+          "legendFormat": "не отправлено уведомлений",
+          "refId": "E"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 18, "w": 24, "h": 6 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Обновления курсов валют (за 10м)",
+      "targets": [
+        {
+          "expr": "increase(currency_update_total[10m])",
+          "legendFormat": "обновлений",
+          "refId": "F"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 24, "w": 34, "h": 6 }
+    }
+  ]
+}

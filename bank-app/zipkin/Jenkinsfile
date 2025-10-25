@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Deploy Zipkin') {
+            steps {
+                script {
+                    // Добавляем репозиторий zipkin (если еще не добавлен)
+                    sh 'helm repo add zipkin https://zipkin.io/zipkin-helm || true'
+                    sh 'helm repo update'
+
+                    // Деплоим Zipkin
+                    sh '''
+                        helm upgrade --install bank-app-zipkin zipkin/zipkin \
+                          --namespace default \
+                          --version 0.4.0 \
+                          --set zipkin.enabled=true \
+                          --set zipkin.service.type=ClusterIP \
+                          --set zipkin.service.port=9411 \
+                          --set zipkin.persistence.enabled=false
+                    '''
+                }
+            }
+        }
+
+        stage('Expose Zipkin via Ingress') {
+            steps {
+                script {
+                    // Создаем ingress манифест на лету
+                    writeFile file: 'zipkin-ingress.yaml', text: '''
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zipkin-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: zipkin
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: bank-app-zipkin
+            port:
+              number: 9411
+'''
+                    sh 'kubectl apply -f zipkin-ingress.yaml'
+                }
+            }
+        }
+
+    }
+}

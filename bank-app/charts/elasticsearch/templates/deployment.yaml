@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-app-elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-app-elasticsearch
+  template:
+    metadata:
+      labels:
+        app: bank-app-elasticsearch
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}

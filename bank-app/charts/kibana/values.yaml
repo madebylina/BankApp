@@ -1,0 +1,31 @@
+replicaCount: 1
+
+image:
+  repository: kibana
+  tag: "8.12.0"
+
+service:
+  port: 5601
+  type: ClusterIP
+
+env:
+  - name: ELASTICSEARCH_HOSTS
+    value: "http://bank-app-elasticsearch:9200"
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+serviceAccount:
+  create: true
+  name: ""
+
+ingress:
+  enabled: true
+  className: "nginx"
+#  hosts:
+#    - host: kibana
+#      paths:
+#        - path: /
+#          pathType: Prefix

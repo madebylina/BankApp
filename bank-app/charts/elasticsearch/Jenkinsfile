@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    environment {
+        SHARED_REPO = '../shared/BankApp' // рабочая папка на jenkins
+        IMAGE_NAME = "elasticsearch" // название образа
+    }
+
+    stages {
+        stage('Get from github') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    echo 'get'
+                    git branch: 'main', url: 'https://github.com/mynameisSergey/BankApp.git'
+                }
+            }
+        }
+
+        stage('Deploy Elasticsearch') {
+            steps {
+                dir("${SHARED_REPO}/bank-app/charts/${IMAGE_NAME}") {
+                    sh """
+                    helm upgrade --install bank-app-elasticsearch . \
+                      --namespace default \
+                      --create-namespace
+                    """
+                }
+            }
+        }
+    }
+
+}

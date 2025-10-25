@@ -1,6 +1,18 @@
 server:
   port: 8087
 
+management:
+  zipkin:
+    tracing:
+      endpoint:  http://127.0.0.1:9411/api/v2/spans # Эндпоинт Zipkin для приёма спанов
+  tracing:
+    sampling:
+      probability: 1 # Сэмплируем все запросы
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 spring:
   application:
     name: blocker-api

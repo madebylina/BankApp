@@ -1,0 +1,61 @@
+# bank-app/charts/grafana/values.yaml
+replicaCount: 1
+
+image:
+  repository: grafana/grafana
+  pullPolicy: IfNotPresent
+  tag: "10.4.0"
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+serviceAccount:
+  create: true
+  name: ""
+
+ingress:
+  enabled: true
+  className: "nginx"
+#  hosts:
+#    - host: grafana
+#      paths:
+#        - path: /
+#          pathType: Prefix
+
+persistence:
+  enabled: true
+  storageClassName: "standard"
+  size: 5Gi
+
+admin:
+  user: admin
+  password: admin
+
+volumes:
+  - name: grafana-provisioning
+    configMap:
+      name: bank-app-grafana-provisioning
+  - name: grafana-dashboards
+    configMap:
+      name: bank-app-grafana-dashboards
+
+volumeMounts:
+  - name: grafana-provisioning
+    mountPath: /etc/grafana/provisioning/datasources/datasources.yml
+    subPath: datasources.yaml
+  - name: grafana-provisioning
+    mountPath: /etc/grafana/provisioning/dashboards/dashboards.yml
+    subPath: dashboards.yaml
+  - name: grafana-dashboards
+    mountPath: /var/lib/grafana/dashboards/business-metrics-dashboard.json
+    subPath: business-metrics-dashboard.json
+  - name: grafana-dashboards
+    mountPath: /var/lib/grafana/dashboards/spring-boot.json
+    subPath: spring-boot.json

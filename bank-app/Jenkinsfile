@@ -90,36 +90,49 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes test') {
-            steps {
-                dir("${SHARED_REPO}/bank-app") {
-                    sh """
-                    echo "${DOCKER_REGISTRY}"
-                    helm upgrade --install bank-app . \
-                      --namespace test --create-namespace \
-                      --set exchange-api.imagePullSecrets[0].name=ghcr-secret \
-                      --set exchange-api.image.repository=${DOCKER_REGISTRY}/exchange-api \
-                      --set exchange-generator.imagePullSecrets[0].name=ghcr-secret \
-                      --set exchange-generator.image.repository=${DOCKER_REGISTRY}/exchange-generator \
-                      --set blocker-api.imagePullSecrets[0].name=ghcr-secret \
-                      --set blocker-api.image.repository=${DOCKER_REGISTRY}/blocker-api \
-                      --set notifications-api.imagePullSecrets[0].name=ghcr-secret \
-                      --set notifications-api.image.repository=${DOCKER_REGISTRY}/notifications-api \
-                      --set accounts-api.imagePullSecrets[0].name=ghcr-secret \
-                      --set accounts-api.image.repository=${DOCKER_REGISTRY}/accounts-api \
-                      --set transfer-api.imagePullSecrets[0].name=ghcr-secret \
-                      --set transfer-api.image.repository=${DOCKER_REGISTRY}/transfer-api \
-                      --set cash-api.imagePullSecrets[0].name=ghcr-secret \
-                      --set cash-api.image.repository=${DOCKER_REGISTRY}/cash-api \
-                      --set front-ui.imagePullSecrets[0].name=ghcr-secret \
-                      --set front-ui.image.repository=${DOCKER_REGISTRY}/front-ui \
-                      --set front-ui.ingress.hosts[0].host=bankapp-test \
-                      --set front-ui.ingress.hosts[0].paths[0].path=/ \
-                      --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix
-                    """
-                }
-            }
-        }
+       stage('Deploy to Kubernetes test') {
+                   steps {
+                       dir("${SHARED_REPO}/bank-app") {
+                           sh """
+                           echo "${DOCKER_REGISTRY}"
+                           helm upgrade --install bank-app . \
+                             --namespace test --create-namespace \
+                             --set exchange-api.imagePullSecrets[0].name=ghcr-secret \
+                             --set exchange-api.image.repository=${DOCKER_REGISTRY}/exchange-api \
+                             --set exchange-generator.imagePullSecrets[0].name=ghcr-secret \
+                             --set exchange-generator.image.repository=${DOCKER_REGISTRY}/exchange-generator \
+                             --set blocker-api.imagePullSecrets[0].name=ghcr-secret \
+                             --set blocker-api.image.repository=${DOCKER_REGISTRY}/blocker-api \
+                             --set notifications-api.imagePullSecrets[0].name=ghcr-secret \
+                             --set notifications-api.image.repository=${DOCKER_REGISTRY}/notifications-api \
+                             --set accounts-api.imagePullSecrets[0].name=ghcr-secret \
+                             --set accounts-api.image.repository=${DOCKER_REGISTRY}/accounts-api \
+                             --set transfer-api.imagePullSecrets[0].name=ghcr-secret \
+                             --set transfer-api.image.repository=${DOCKER_REGISTRY}/transfer-api \
+                             --set cash-api.imagePullSecrets[0].name=ghcr-secret \
+                             --set cash-api.image.repository=${DOCKER_REGISTRY}/cash-api \
+                             --set front-ui.imagePullSecrets[0].name=ghcr-secret \
+                             --set front-ui.image.repository=${DOCKER_REGISTRY}/front-ui \
+                             --set front-ui.ingress.hosts[0].host=bankapp-test \
+                             --set front-ui.ingress.hosts[0].paths[0].path=/ \
+                             --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix \
+                             --set zipkin.ingress.enabled=true \
+                             --set zipkin.ingress.host=zipkin-test \
+                             --set zipkin.ingress.path=/ \
+                             --set zipkin.ingress.pathType=Prefix \
+                             --set prometheus.ingress.hosts[0].host=prometheus-test \
+                             --set prometheus.ingress.hosts[0].paths[0].path=/ \
+                             --set prometheus.ingress.hosts[0].paths[0].pathType=Prefix \
+                             --set grafana.ingress.hosts[0].host=grafana-test \
+                             --set grafana.ingress.hosts[0].paths[0].path=/ \
+                             --set grafana.ingress.hosts[0].paths[0].pathType=Prefix \
+                             --set kibana.ingress.hosts[0].host=kibana-test \
+                             --set kibana.ingress.hosts[0].paths[0].path=/ \
+                             --set kibana.ingress.hosts[0].paths[0].pathType=Prefix
+                           """
+                       }
+                   }
+               }
 
         stage('Manual Approval for PROD') {
             steps {
@@ -174,7 +187,20 @@ pipeline {
                       --set front-ui.image.repository=${DOCKER_REGISTRY}/front-ui \
                       --set front-ui.ingress.hosts[0].host=bankapp-prod \
                       --set front-ui.ingress.hosts[0].paths[0].path=/ \
-                      --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix
+                      --set front-ui.ingress.hosts[0].paths[0].pathType=Prefix \
+                      --set zipkin.ingress.enabled=true \
+                      --set zipkin.ingress.host=zipkin-prod \
+                      --set zipkin.ingress.path=/ \
+                      --set zipkin.ingress.pathType=Prefix \
+                      --set prometheus.ingress.hosts[0].host=prometheus-prod \
+                      --set prometheus.ingress.hosts[0].paths[0].path=/ \
+                      --set prometheus.ingress.hosts[0].paths[0].pathType=Prefix \
+                      --set grafana.ingress.hosts[0].host=grafana-prod \
+                      --set grafana.ingress.hosts[0].paths[0].path=/ \
+                      --set grafana.ingress.hosts[0].paths[0].pathType=Prefix \
+                      --set kibana.ingress.hosts[0].host=kibana-prod \
+                      --set kibana.ingress.hosts[0].paths[0].path=/ \
+                      --set kibana.ingress.hosts[0].paths[0].pathType=Prefix
                     """
                 }
             }

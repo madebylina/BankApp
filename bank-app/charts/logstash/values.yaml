@@ -1,0 +1,23 @@
+image:
+  repository: docker.elastic.co/logstash/logstash
+  tag: "9.0.0"
+
+service:
+  type: ClusterIP
+  ports:
+    - name: beats
+      port: 5044
+      targetPort: 5044
+    - name: api
+      port: 9600
+      targetPort: 9600
+
+serviceAccount:
+  create: true
+  name: ""
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false

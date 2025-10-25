@@ -1,0 +1,70 @@
+global:
+  scrape_interval: 15s
+
+rule_files:
+  - "alerts.rules.yml"
+
+scrape_configs:
+  - job_name: 'exchange-api'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-exchange-api:8084' ]
+        #- targets: ['host.docker.internal:8084']
+        labels:
+          application: 'exchange-api'
+
+  - job_name: 'exchange-generator'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-exchange-generator:8085' ]
+        #- targets: ['host.docker.internal:8085']
+        labels:
+          application: 'exchange-generator'
+
+  - job_name: 'blocker-api'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-blocker-api:8087' ]
+        #- targets: ['host.docker.internal:8087']
+        labels:
+          application: 'blocker-api'
+
+  - job_name: 'notifications-api'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-notifications-api:8086' ]
+        #- targets: ['host.docker.internal:8086']
+        labels:
+          application: 'notifications-api'
+
+  - job_name: 'accounts-api'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-accounts-api:8081' ]
+        #- targets: ['host.docker.internal:8081']
+        labels:
+          application: 'accounts-api'
+
+  - job_name: 'transfer-api'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-transfer-api:8083' ]
+        #- targets: ['host.docker.internal:8083']
+        labels:
+          application: 'transfer-api'
+
+  - job_name: 'cash-api'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-cash-api:8082' ]
+        #- targets: ['host.docker.internal:8082']
+        labels:
+          application: 'cash-api'
+
+  - job_name: 'front-ui'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'bank-app-front-ui:8080' ]
+        #- targets: ['host.docker.internal:8080']
+        labels:
+          application: 'front-ui'
