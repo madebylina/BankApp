@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: front-ui
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+initContainers:
+  - name: wait-for-cash-api
+    image: busybox:1.36
+    command: ['sh', '-c', 'until nc -z bank-app-cash-api 8082; do echo "Waiting for cash-api..."; sleep 3; done']
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 20
+
+serviceAccount:
+  create: false
+  name: default
+  automount: false

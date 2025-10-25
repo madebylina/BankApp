@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: "prom/prometheus"
+  tag: "v2.52.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 9090
+  targetPort: 9090
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
+serviceAccount:
+  create: true
+  name: ""
+
+ingress:
+  enabled: true
+  className: "nginx"
+#  hosts:
+#    - host: prometheus
+#      paths:
+#        - path: /
+#          pathType: Prefix
+
+volumes:
+  - name: prometheus-config
+    configMap:
+      name: bank-app-prometheus-config
+
+volumeMounts:
+  - name: prometheus-config
+    mountPath: /etc/prometheus/prometheus.yml
+    subPath: prometheus.yml
+  - name: prometheus-config
+    mountPath: /etc/prometheus/alerts.rules.yml
+    subPath: alerts.rules.yml

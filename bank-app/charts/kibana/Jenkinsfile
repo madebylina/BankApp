@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    environment {
+        SHARED_REPO = '../shared/bankapp' // рабочая папка на jenkins
+        IMAGE_NAME = "kibana" // название образа
+    }
+
+    stages {
+        stage('Get from github') {
+            steps {
+                dir("${SHARED_REPO}") {
+                    echo 'get'
+                    git branch: 'metrics', url: 'https://github.com/springRill/bankapp.git'
+                }
+            }
+        }
+
+        stage('Deploy Kibana') {
+            steps {
+                dir("${SHARED_REPO}/bank-app/charts/${IMAGE_NAME}") {
+                    sh """
+                    helm upgrade --install bank-app-kibana . \
+                      --namespace default \
+                      --create-namespace \
+                      --set ingress.enabled=true \
+                      --set ingress.className=nginx \
+                      --set ingress.hosts[0].host=kibana \
+                      --set ingress.hosts[0].paths[0].path=/ \
+                      --set ingress.hosts[0].paths[0].pathType=Prefix
+                    """
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "prometheus.fullname" . }}-config
+  labels:
+    {{- include "prometheus.labels" . | nindent 4 }}
+data:
+  prometheus.yml: |
+    {{- .Files.Get "files/prometheus.yml" | nindent 4 }}
+  alerts.rules.yml: |
+    {{- .Files.Get "files/alerts.rules.yml" | nindent 4 }}

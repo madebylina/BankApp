@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-pipelines
+data:
+  logstash.conf: |
+  {{ .Files.Get "files/logstash.conf" | indent 4 }}

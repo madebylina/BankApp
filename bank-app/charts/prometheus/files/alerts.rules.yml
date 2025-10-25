@@ -1,0 +1,66 @@
+groups:
+  - name: LoginAlerts
+    rules:
+      - alert: Неуспешные логины
+        expr: increase(user_login_failure_total[1m]) > 2
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Слишком много неуспешных логинов"
+          description: "Количество неуспешных логинов за минуту: {{ $value }}"
+
+  - name: TransferAlerts
+    rules:
+      - alert: Неуспешные переводы
+        expr: increase(transfer_failure_total[5m]) > 30
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Слишком много неуспешных переводов"
+          description: "Количество неуспешных переводов за 5 минут: {{ $value }}"
+
+  - name: BlockerTransferAlerts
+    rules:
+      - alert: Блокировка переводов
+        expr: increase(transfer_blocker_total[10m]) > 10
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Слишком много заблокированных переводов"
+          description: "Количество заблокированных переводов за 10 минут: {{ $value }}"
+
+  - name: BlockerCashAlerts
+    rules:
+      - alert: Блокировка операций с наличностью
+        expr: increase(cash_blocker_total[10m]) > 10
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Слишком много заблокированных операций с наличностью"
+          description: "Количество заблокированных операций с наличностью за 10 минут: {{ $value }}"
+
+  - name: NotificationsAlerts
+    rules:
+      - alert: Блокировка операций с наличными
+        expr: increase(transfer_failure_total[10m]) > 30
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Слишком много неуспешных переводов"
+          description: "Количество неуспешных переводов за 10 минут: {{ $value }}"
+
+  - name: CurrencyNotUpdated
+    rules:
+      - alert: Обновление курсов валют
+        expr: increase(currency_update_total[1m]) == 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Курсы валют не обновлялись больше минуты"
+          description: "Курсы валют не обновлялись больше минуты"
