@@ -5,6 +5,7 @@ import com.cash.dto.UserDto;
 import com.cash.service.AccountsApiService;
 import com.cash.service.BlockerApiService;
 import com.cash.service.NotificationsApiService;
+import com.cash.service.NotificationsProducer;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
@@ -26,6 +27,9 @@ public abstract class BaseContractTest {
 
     @MockitoBean
     protected NotificationsApiService notificationsApiService;
+
+    @MockitoBean
+    private NotificationsProducer notificationsProducer;
 
     @MockitoBean
     protected BlockerApiService blockerApiService;

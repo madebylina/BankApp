@@ -1,9 +1,30 @@
 server:
   port: 8082
 
+management:
+  zipkin:
+    tracing:
+      #endpoint:  http://127.0.0.1:9411/api/v2/spans
+      endpoint: ${ZIPKIN_URL:http://127.0.0.1:9411/api/v2/spans}
+  tracing:
+    sampling:
+      probability: 1
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 spring:
   application:
     name: cash-api
+  kafka:
+    admin:
+      auto-create: true
+
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   security:
     oauth2:
