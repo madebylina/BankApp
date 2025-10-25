@@ -1,243 +1,219 @@
-📌 Микросервисное приложение «Банк»
+# Bank Microservices App
 
-✏️ Функциональность
+A microservices-based banking application built with Spring Boot, Kubernetes, and Kafka.
 
-Пользователь может:
-⦁ Регистрироваться в системе (создавать новый аккаунт)
-⦁ Входить в систему по логину и паролю
-⦁ Добавлять счета в разных валютах
-⦁ Вносить и снимать виртуальные деньги со счетов
-⦁ Переводить деньги между своими счетами с конвертацией валют
-⦁ Переводить деньги на счета других пользователей с конвертацией валют
+## What It Does
 
-✏️ Страницы Front UI
+Users can:
+- Sign up and create an account
+- Log in with username and password
+- Add accounts in different currencies
+- Deposit and withdraw virtual money
+- Transfer money between their own accounts (with currency conversion)
+- Send money to other users (with currency conversion)
 
-📚 Страница регистрации пользователя
-⦁ Поля ввода:
-⦁ Фамилия
-⦁ Имя
-⦁ Почта (для уведомлений)
-⦁ Дата рождения
-⦁ Логин
-⦁ Пароль
-⦁ Кнопка «Зарегистрироваться»
-⦁ Валидация:
-⦁ Все поля обязательны
-⦁ Возраст пользователя должен быть не менее 18 лет
-⦁ После успешной регистрации — автоматическая аутентификация и редирект на главную страницу
+## Frontend Pages
 
-📚 Страница входа
-⦁ Поля ввода логина и пароля
-⦁ Кнопка «Войти»
-⦁ Возможность реализации «remember-me»
-⦁ При успешной аутентификации — переход на главную страницу
+**Registration Page**
+- Fields: Last name, First name, Email, Date of birth, Username, Password
+- Validation: All fields required, must be 18+ years old
+- After signup, you're automatically logged in and redirected to the dashboard
 
-📚 Главная страница (доступна только авторизованным пользователям)
-Включает блоки:
-⦁ Настроек аккаунта
-⦁ Внесения и снятия виртуальных денег
-⦁ Перевода денег между своими счетами
-⦁ Перевода денег на счет другого пользователя
-⦁ Просмотра курсов валют
+**Login Page**
+- Username and password fields
+- Optional "remember me" feature
+- Takes you to the dashboard after login
 
-📚 Страница выхода
-⦁ Ссылка для выхода из аккаунта
-⦁ Редирект на страницу входа после выхода
+**Dashboard** (only for logged-in users)
+Has sections for:
+- Account settings
+- Depositing and withdrawing money
+- Transferring between your accounts
+- Sending money to other users
+- Viewing exchange rates
 
-📌 Сервисы микросервисного приложения «Банк»
+**Logout**
+- Just a link that logs you out and sends you back to the login page
 
-✏️ Сервис аккаунтов (Accounts)
-⦁ Хранит данные зарегистрированных аккаунтов и информации о счетах каждого пользователя (включая логин и пароль, которые используются при аутентификации).
-⦁ Обрабатывает REST-запросы (JSON) от Front UI для получения, редактирования, добавления и удаления данных аккаунтов и счетов через блок настроек аккаунта.
-⦁ При регистрации нового пользователя принимает запросы с формы регистрации.
-⦁ Делает REST-запросы (JSON) в сервис Notifications для отправки уведомлений.
+## Microservices
 
-✏️ Сервис обналичивания денег (Cash)
-⦁ Выполняет пополнение и снятие виртуальных денег со счетов.
-⦁ Получает REST-запросы от Front UI из блока внесения и снятия денег.
-⦁ Делает REST-запросы в сервисы Accounts (чтобы проверить и обновить состояние счетов), Blocker (для проверки операций на подозрительность) и Notifications (для уведомлений).
+**Accounts Service**
+- Stores user accounts and their banking accounts (including login credentials)
+- Handles REST requests from the frontend for managing accounts
+- Sends notifications through the Notifications service
 
-✏️ Сервис перевода денег между счетами (Transfer)
-⦁ Обрабатывает перевод денег между счетами одного пользователя и счетами разных пользователей.
-⦁ Получает REST-запросы из Front UI из блоков перевода между своими счетами и на счет другого аккаунта.
-⦁ Делает REST-запросы в сервисы Accounts (для работы с аккаунтами и счетами), Exchange (для конвертации валют), Blocker (для проверки безопасности операций) и Notifications (для уведомлений).
+**Cash Service**
+- Handles deposits and withdrawals
+- Checks with Accounts service to verify and update balances
+- Uses Blocker service to detect suspicious activity
+- Sends notifications
 
-✏️ Сервис конвертации валют (Exchange)
-⦁ Хранит данные о курсах валют и обеспечивает конвертацию при покупке/продаже валют (базовая валюта — RUB, с курсом 1).
-⦁ Принимает REST-запросы от Front UI из блока курсов валют для получения актуальных курсов и проведения конвертаций.
+**Transfer Service**
+- Processes money transfers between accounts (same user or different users)
+- Works with Accounts, Exchange, Blocker, and Notifications services
+- Handles currency conversion when needed
 
-✏️ Сервис генерации курсов валют (Exchange Generator)
-⦁ Каждую секунду по расписанию генерирует курсы валют.
-⦁ Алгоритм генерации может быть любой: Round Robin из файла или БД, случайные значения и т.п.
-⦁ Валюты — минимум три: RUB (базовая), USD и CNY.
-⦁ При конвертации из USD в CNY сначала USD конвертируется в RUB, затем RUB в CNY.
-⦁ Отправляет сгенерированные курсы в сервис Exchange через REST-запросы в формате JSON.
+**Exchange Service**
+- Stores exchange rates and handles currency conversions
+- Base currency is RUB (rate = 1)
+- Provides current rates to the frontend
 
-✏️ Сервис блокировки подозрительных операций (Blocker)
-⦁ Отслеживает подозрительные операции по алгоритму (например, случайно или в зависимости от времени).
-⦁ Помогает защищать систему от мошеннических действий.
+**Exchange Generator Service**
+- Generates new exchange rates every second
+- Supports at least 3 currencies: RUB (base), USD, and CNY
+- When converting USD to CNY, it goes through RUB first
+- Sends rates to Exchange service via REST
 
-✏️ Сервис уведомлений (Notifications)
-⦁ Отправляет уведомления пользователям о важных действиях: перевод денег, пополнение или снятие со счёта и т.д.
-⦁ Варианты отправки: email, Alerts или другие способы.
+**Blocker Service**
+- Watches for suspicious transactions
+- Helps protect against fraud
 
-## Схема взаимодействия сервисов![Схема взаимодействия сервисов](https://github.com/mynameisSergey/BankApp/blob/main/image/schema.png)
+**Notifications Service**
+- Sends notifications about important actions (transfers, deposits, withdrawals, etc.)
+- Can send via email or alerts
 
-_Для подробностей смотрите [схему на GitHub](https://github.com/mynameisSergey/BankApp/blob/main/image/schema.png)._
+## Architecture
 
-📌 Описание проекта
+![Service Architecture](https://github.com/mynameisSergey/BankApp/blob/main/image/schema.png)
 
-Приложение состоит из следующих частей:
+_Check out the [full diagram on GitHub](https://github.com/mynameisSergey/BankApp/blob/main/image/schema.png)_
 
-⦁ postgresql
-⦁ kafka
-⦁ nginx
-⦁ keycloak с конфигурацией
-⦁ notifications — сервис уведомлений
-⦁ blocker — сервис блокировки операций
-⦁ exchange-generator — генератор курсов валют
-⦁ exchange — хранение курсов валют
-⦁ cash — ввод/вывод наличных
-⦁ transfer — переводы между счетами
-⦁ accounts — хранение информации о пользователях и счетах
-⦁ front-ui — веб-клиент
+## Tech Stack
 
-————————
+- PostgreSQL
+- Kafka
+- Nginx
+- Keycloak (authentication)
+- Spring Boot microservices
+- React frontend
 
-📌 Запуск приложения с Helm на Windows 10
+## Running with Helm on Windows 10
 
-1. Собрать все модули Maven пакетом  
-   Выполнить из корня проекта:
+**1. Build all Maven modules:**
+```bash
+mvn clean package
+```
 
-   mvn clean package
+**2. Start Minikube with Docker:**
+```bash
+minikube start --driver=docker
+```
 
+**3. Install ingress-nginx controller:**
+```bash
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+```
 
-2. Запустить Minikube с Docker драйвером:
+**4. Use Docker inside Minikube:**
+```bash
+minikube docker-env | Invoke-Expression
+```
 
-   minikube start --driver=docker
+**5. Build Docker images:**
+```bash
+docker build -t exchange-api ./exchange
+docker build -t exchange-generator ./exchange-generator
+docker build -t blocker-api ./blocker
+docker build -t notifications-api ./notifications
+docker build -t accounts-api ./accounts
+docker build -t transfer-api ./transfer
+docker build -t cash-api ./cash
+docker build -t front-ui ./front-ui
+```
 
+**6. Update Helm dependencies:**
+```bash
+helm dependency update ./bank-app
+```
 
-3. Установить ingress-nginx контроллер:
+**7. Install the app:**
+```bash
+helm install bank-app ./bank-app
+```
 
-   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-   helm repo update
-   helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+**8. Check if pods are ready:**
+```bash
+kubectl get pods
+```
 
+**9. Forward the frontend port:**
+```bash
+kubectl port-forward svc/bank-app-front-ui 8080:8080
+```
+Open http://localhost:8080/ in your browser
 
-4. Использовать Docker внутри Minikube:
+**10. (Optional) Add a custom host:**
+Add to `/etc/hosts`:
+```
+127.0.0.1 bankapp
+```
+Then run:
+```bash
+minikube tunnel
+```
+Now you can access it at http://bankapp/
 
-   minikube docker-env | Invoke-Expression
+## Stopping the App
 
-
-5. Построить docker-образы сервисов:
-
-   docker build -t exchange-api./exchange
-   docker build -t exchange-generator./exchange-generator
-   docker build -t blocker-api./blocker
-   docker build -t notifications-api./notifications
-   docker build -t accounts-api./accounts
-   docker build -t transfer-api./transfer
-   docker build -t cash-api./cash
-   docker build -t front-ui./front-ui
-
-
-6. Обновить зависимости Helm чарта:
-
-   helm dependency update./bank-app
-
-
-7. Установить приложение через Helm в текущий кластер:
-
-   helm install bank-app./bank-app
-
-
-8. Проверить готовность подов:
-
-   kubectl get pods
-
-
-9. Перенаправить порт для фронтенда:
-
-   kubectl port-forward svc/bank-app-front-ui 8080:8080
-
-   Открыть в браузере: http://localhost:8080/
-
-10. (Опционально) Добавить удобный хост в etc/hosts:
-
-    127.0.0.1 bankapp
-
-    И запустить:
-
-    minikube tunnel
-
-    После откроется: http://bankapp/
-
-————————
-
-📌 Остановка приложения
-
+```bash
 helm uninstall bank-app
+```
 
+## Running with Jenkins
 
-————————
+**1. Enable Docker daemon in Docker Desktop:**
+```
+Settings -> General -> Expose daemon on tcp://localhost:2375 without TLS
+```
 
-📌 Запуск Jenkins в Windows 10 с интеграцией Minikube и Docker
+**2. Configure environment variables in `jenkins/.env`:**
+- `MINIKUBE_PATH` - path to minikube profile (e.g., C:/Users/your_user/.minikube)
+- `GHCR_TOKEN` - GitHub Container Registry token
+- `GITHUB_USERNAME` - your GitHub username
+- `DOCKER_REGISTRY` - Docker Registry address
 
-1. В настройках Docker Desktop включить:
+**3. Start Jenkins:**
+```bash
+cd jenkins
+docker-compose up -d
+```
 
-   Settings -> General -> Expose daemon on tcp://localhost:2375 without TLS
+**4. Connect Jenkins to Minikube network:**
+```bash
+docker network connect minikube jenkins
+```
 
+## Deploying Individual Services with Jenkins
 
-2. В файле jenkins/.env прописать переменные:
-   ⦁ MINIKUBE_PATH — путь к профилю minikube (напр. C:/Users/your_user/.minikube)
-   ⦁ GHCR_TOKEN — токен GitHub Container Registry
-   ⦁ GITHUB_USERNAME — имя пользователя GitHub
-   ⦁ DOCKER_REGISTRY — адрес Docker Registry
+Run these builds in order (each deploys to the `default` namespace):
 
-3. Запустить Jenkins через docker-compose в каталоге jenkins:
+1. 01_kafka
+2. 02_keycloak
+3. 03_postgresql
+4. 04_exchange-api
+5. 05_exchange-generator
+6. 06_blocker-api
+7. 07_notifications-api
+8. 08_accounts-api
+9. 09_transfer-api
+10. 10_cash-api
+11. 11_front-ui
 
-   docker-compose up -d
+## Deploying the Full App
 
-
-4. Подключить Jenkins к Docker-сети Minikube:
-
-   docker network connect minikube jenkins
-
-
-————————
-
-📌 Запуск отдельных Helm-чартов для каждого сервиса
-
-В Jenkins запускать сборки в следующем порядке, каждый отдельным чартом в namespace default:
-
-01_kafka
-02_keycloak
-03_postgresql
-04_exchange-api
-05_exchange-generator
-06_blocker-api
-07_notifications-api
-08_accounts-api
-09_transfer-api
-10_cash-api
-11_front-ui
-
-————————
-
-📌 Запуск всего приложения целиком в namespace test (и опционально prod)
-
-В Jenkins запустить сборку:
-
+Run the Jenkins build:
+```
 00_bank-app
+```
 
-
-Добавить в etc/hosts:
-
+Add to `/etc/hosts`:
+```
 127.0.0.1 BankApp-test
 127.0.0.1 BankApp-prod
+```
 
-
-После запуска перейти в браузере:
-
-⦁ Тестовое: http://BankApp-test/
-⦁ Продуктовое: http://BankApp-prod/
+Access the app:
+- Test: http://BankApp-test/
+- Production: http://BankApp-prod/
