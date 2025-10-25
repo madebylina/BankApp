@@ -1,0 +1,4 @@
+apiVersion: v2
+name: kibana
+description: A Helm chart for Kibana
+version: 0.1.0
